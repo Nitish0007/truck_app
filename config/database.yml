@@ -25,5 +25,5 @@ test:
   database: transport_test_db
 
 production:
-  <<: *default
-  database: transport_db
+  url: <%= ENV['DATABASE_URL'] %>
+  pool: 5
