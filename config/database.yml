@@ -26,5 +26,4 @@ test:
 
 production:
   <<: *default
-  # trying pushing directly
   database: transport_db
