@@ -87,6 +87,17 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
+  config.action_mailer.default_url_options = { host: 'truck-app-ojfd.onrender.com', protocol: 'https' }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+  address: "smtp-relay.brevo.com",
+  port: 587,
+  user_name: ENV["SMTP_USERNAME"],
+  password: ENV["SMTP_PASSWORD"],
+  authentication: :login,
+  enable_starttls_auto: true
+}
+
   # Enable DNS rebinding protection and other `Host` header attacks.
   # config.hosts = [
   #   "example.com",     # Allow requests from example.com

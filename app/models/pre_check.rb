@@ -1,0 +1,3 @@
+class PreCheck < ApplicationRecord
+  
+end

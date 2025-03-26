@@ -21,15 +21,15 @@ class Api::V1::UsersController < ApplicationController
     user = User.find_by(id: params[:user_id])
     
     if user.nil?
-      return render json: { errors: { base: ["User not found"] } }, status: :not_found
+      return render json: { errors: ["User not found"] }, status: :not_found
     end
     
     unless params[:old_password].present?
-      return render json: { errors: { base: ["Old password is required"] } }, status: :unprocessable_entity
+      return render json: { errors: ["Old password is required"] }, status: :unprocessable_entity
     end
 
     unless user.valid_password?(params[:old_password])
-      return render json: { errors: { base: ["Incorrect old password"] } }, status: :unprocessable_entity
+      return render json: { errors: ["Incorrect old password"] }, status: :unprocessable_entity
     end
 
     if user.update(reset_password_params)

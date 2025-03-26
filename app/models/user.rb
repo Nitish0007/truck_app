@@ -4,5 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
 
   enum role: { admin: 0, driver: 1 }
+  
+  has_many :rides
 
 end

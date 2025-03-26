@@ -31,7 +31,13 @@ class ApplicationController < ActionController::Base
 
 	def allow_admin_only
 		if !admin_user?
-			render json: { message: "This action is protected, you don't have permission to perform this action" }, status: :unauthorized
+			render json: { message: "Only Admin can perform this action" }, status: :unauthorized
+		end
+	end
+
+	def allow_driver_only
+		if admin_user?
+			render json: { message: "Only Drivers can perform this action" }, status: :unauthorized
 		end
 	end
 
