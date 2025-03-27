@@ -1,5 +1,13 @@
 class Api::V1::UsersController < ApplicationController
 
+  def show
+    user = User.find_by(id: params[:user_id])
+    unless user.present?
+      render json: { errors: ['User not found']}, status: :not_found
+    end
+    render json: user.as_json(only: [:id, :name, :email, :phone, :license_number, :license_expiry_date, :role])
+  end
+
   # This is for update profile parameters not passwords
   def update
     user = User.find_by_id params[:user_id]

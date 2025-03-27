@@ -2,11 +2,14 @@ class Api::V1::RidesController < ApplicationController
   before_action :allow_driver_only, only: [:create, :update]
 
   def index
-    rides = Ride.all
-
-    # filter driver specific rides
-    rides = rides.where(user_id: params[:driver_id]) if params[:driver_id].present?
-
+    if current_user.role == 1
+      # filter driver specific rides
+      rides = rides.where(user_id: params[:user_id]) if params[:user_id].present?
+    else # for admin users only
+      rides = Ride.all
+      # if admin wants driver specific rides, then in params we need driver_id
+      rides = rides.where(user_id: params[:driver_id]) if params[:driver_id].present?
+    end
     # filter truck specific rides
     rides = rides.where(truck_id: params[:truck_id]) if params[:truck_id].present?
 

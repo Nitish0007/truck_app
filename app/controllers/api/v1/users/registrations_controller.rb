@@ -9,7 +9,7 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
     if user.save
       render json: {
         message: "User Signed Up successfully",
-        user: user.as_json(only: [:id, :name, :email, :phone, :license_number, :license_expiry_date])
+        user: user.as_json(only: [:id, :name, :email, :phone, :license_number, :license_expiry_date, :role])
       }, status: :created
     else
       render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
@@ -18,7 +18,7 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
 
   private
   def sign_up_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation, :phone, :license_number, :license_expiry_date).merge(role: :driver)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :phone, :license_number, :license_expiry_date, :role)
   end
 
   def set_devise_mapping

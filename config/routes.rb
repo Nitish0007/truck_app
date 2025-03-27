@@ -31,10 +31,15 @@ Rails.application.routes.draw do
       end
       
       # user routes
+      get 'users/:user_id', to: 'users#show'
       put 'users/:user_id/update_profile', to: 'users#update'
       put 'users/:user_id/reset_password', to: 'users#reset_password'
       # ----------------------------------------------------------------------- #
 
+      scope ':user_id' do
+        resources :rides, except: [:new, :destroy, :edit]
+        resources :trucks, except: [:new, :edit]
+      end
       
 
     end
