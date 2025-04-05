@@ -1,4 +1,19 @@
 class Api::V1::UsersController < ApplicationController
+  before_action :allow_admin_only, only: [:index]
+
+  def index
+    # fetch list of drivers
+    users = User.includes(:documents).where(role: 1)
+    render json: users.as_json(
+      only: [:id, :name, :email, :phone, :license_number, :license_expiry_date],
+      include: {
+        documents: {
+          only: [:id, :document_type, :source_class, :created_at, :updated_at],
+          methods: [:file_url]
+        }
+      }
+      ), status: :ok
+  end
 
   def show
     user = User.find_by(id: params[:user_id])
@@ -15,7 +30,15 @@ class Api::V1::UsersController < ApplicationController
       if user.update(update_params)
         render json: {
           message: "User Updated successfully",
-          user: user.as_json(only: [:id, :name, :email, :phone, :license_number, :license_expiry_date])
+          user: user.as_json(
+            only: [:id, :name, :email, :phone, :license_number, :license_expiry_date],
+            include: {
+              documents: {
+                only: [:id, :document_type, :source_class, :created_at, :updated_at],
+                methods: [:file_url]
+              }
+            }
+          )
         }, status: :ok
       else
         render json: { errors: user.errors.full_messages }, status: :unprocessable_entity

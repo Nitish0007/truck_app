@@ -22,6 +22,8 @@ module TruckTransport
     config.autoload_lib(ignore: %w(assets tasks))
 
     config.action_mailer.default_url_options = { host: 'http://localhost:3000' }
+    
+    config.active_storage.analyze_after_uploads = false
 
     # Configuration for the application, engines, and railties goes here.
     #

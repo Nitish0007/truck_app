@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       end
       
       # user routes
+      get 'users/:user_id/drivers', to: 'users#index'
       get 'users/:user_id', to: 'users#show'
       put 'users/:user_id/update_profile', to: 'users#update'
       put 'users/:user_id/reset_password', to: 'users#reset_password'
@@ -39,6 +40,17 @@ Rails.application.routes.draw do
       scope ':user_id' do
         resources :rides, except: [:new, :destroy, :edit]
         resources :trucks, except: [:new, :edit]
+        resources :worksheets, except: [:new, :edit]
+        resources :pre_checks, except: [:new, :edit]
+        resources :documents, only: [:create, :update, :destroy] do
+          collection do
+            post :get_upload_url
+          end
+          
+          member do
+            get :get_download_url
+          end
+        end
       end
       
 
