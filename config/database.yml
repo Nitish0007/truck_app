@@ -28,9 +28,9 @@ production:
   adapter: postgresql
   encoding: unicode
   pool: 5
-  username: prod_root
-  password: pstE7n21SBeF4yZGTYKzMYI6NgM48HGB
-  host: dpg-cvhesh8fnakc739lgg9g-a
-  port: 5432
-  database: transport_db_3m0b
-  # DATABASE_URL=postgresql://prod_root:pstE7n21SBeF4yZGTYKzMYI6NgM48HGB@dpg-cvhesh8fnakc739lgg9g-a.oregon-postgres.render.com/transport_db_3m0b
+  username: <%= ENV.fetch("DB_USERNAME") %>
+  password: <%= ENV.fetch("DB_PASS") %>
+  host: <%= ENV.fetch("DB_HOST") %>
+  port: <%= ENV.fetch("DB_PORT") %>
+  database: <%= ENV.fetch("DB_NAME") %>
+  url: <%= ENV.fetch("PROD_DB_URL") %>
