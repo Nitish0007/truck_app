@@ -10,7 +10,7 @@ local:
 amazon_dev:
   service: S3
   access_key_id: <%= ENV.fetch("S3_DEV_ACCESS_KEY_ID") %>
-  secret_access_key: <%= ENV("S3_DEV_SECRET_ACCESS_KEY") %>
+  secret_access_key: <%= ENV.fetch("S3_DEV_SECRET_ACCESS_KEY") %>
   region: ap-south-1
   bucket: truck-dev-assets
 
