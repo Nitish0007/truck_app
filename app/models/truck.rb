@@ -5,7 +5,7 @@ class Truck < ApplicationRecord
 
   def current_ride_and_driver_if_exists?
     latest_ride = rides.order(updated_at: :desc).try(:first)
-    return nil if latest_ride.nil?
+    return {active_ride: nil, active_driver: nil} if latest_ride.nil?
 
     start_date = latest_ride&.worksheet&.started_on&.in_time_zone
     end_date = latest_ride&.worksheet&.completed_on&.in_time_zone

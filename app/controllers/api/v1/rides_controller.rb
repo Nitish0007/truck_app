@@ -76,7 +76,17 @@ class Api::V1::RidesController < ApplicationController
 
   def update
     ride = Ride.find_by_id(params[:id])
-    unless ride
+    permitted_params = ride_params.to_h
+
+    if permitted_params.dig("worksheet_attributes", "id").blank?
+      permitted_params.delete("worksheet_attributes")
+    end
+
+    if permitted_params.dig("pre_check_attributes", "id").blank?
+      permitted_params.delete("pre_check_attributes")
+    end
+    
+    unless ride.present?
       return render json: { errors: ["Ride not found"] }, status: :not_found
     end
 
@@ -92,8 +102,8 @@ class Api::V1::RidesController < ApplicationController
       end
     end
 
-    if current_user.admin? || is_ride_editable_or_deletable?
-      if ride.update(ride_params)
+    if current_user.admin? || ride.is_ride_editable_or_deletable?
+      if ride.update(permitted_params)
         render json: { data: {ride: ride, worksheet: ride.worksheet, pre_check: ride.pre_check, driver: ride.driver, truck: ride.truck} }, status: :ok
       else
         render json: { errors: ride.errors.full_messages }, status: :unprocessable_entity
@@ -106,13 +116,13 @@ class Api::V1::RidesController < ApplicationController
   def destroy
     ride = Ride.find_by(id: params[:id])
   
-    unless ride
+    unless ride.present?
       return render json: { errors: ["Ride not found"] }, status: :not_found
     end
   
     end_date = ride.worksheet&.completed_on&.in_time_zone&.to_date
 
-    if current_user.admin? || is_ride_editable_or_deletable?
+    if current_user.admin? || ride.is_ride_editable_or_deletable?
       if ride.destroy
         render json: { message: "Ride deleted successfully" }, status: :ok
       else
@@ -127,9 +137,10 @@ class Api::V1::RidesController < ApplicationController
   private
   def ride_params
     params.require(:ride).permit(
-      :truck_id, :start_location, :end_location
-      worksheet_attributes: [:start_kms, :end_kms, :started_on, :completed_on],
+      :truck_id, :start_location, :end_location,
+      worksheet_attributes: [:id, :start_kms, :end_kms, :started_on, :completed_on],
       pre_check_attributes: [
+        :id,
         { truck_inspection: {} }, 
         { trailer_inspection: {} }, 
         { driver_self_inspection: {} }
