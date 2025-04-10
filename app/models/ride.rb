@@ -46,6 +46,7 @@ class Ride < ApplicationRecord
 
   def check_active_rides_of_truck
     truck = Truck.find_by(id: self.truck_id)
+    errors.add(:base, "Truck with id #{self.truck_id} doesn't exists") && return if truck.nil?
     data = truck.current_ride_and_driver_if_exists?
     active_ride = data[:active_ride]
     active_driver = data[:active_driver]
@@ -53,6 +54,7 @@ class Ride < ApplicationRecord
       # start_date = latest_ride&.worksheet&.started_on
       end_date = active_ride&.worksheet&.completed_on
       if end_date.present? && end_date.to_date > Time.zone.today || end_date.blank?
+        return if self.persisted? && !will_save_change_to_truck_id?
         errors.add(:base, "Truck is already on another ride, ask driver(#{active_driver.name}) or admin, driver contact number: #{active_driver.phone}, email: #{active_driver.email}")
       end
     end
