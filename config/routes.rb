@@ -41,7 +41,6 @@ Rails.application.routes.draw do
         resources :rides, except: [:new, :destroy, :edit]
         resources :trucks, except: [:new, :edit]
         resources :worksheets, except: [:new, :edit]
-        resources :pre_checks, except: [:new, :edit]
         resources :documents, only: [:create, :update, :destroy] do
           collection do
             post :get_upload_url

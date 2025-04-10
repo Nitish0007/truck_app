@@ -20,7 +20,15 @@ class Api::V1::UsersController < ApplicationController
     unless user.present?
       render json: { errors: ['User not found']}, status: :not_found
     end
-    render json: user.as_json(only: [:id, :name, :email, :phone, :license_number, :license_expiry_date, :role])
+    render json: user.as_json(
+      only: [:id, :name, :email, :phone, :license_number, :license_expiry_date, :role],
+      include: {
+        documents: {
+          only; [:id, :document_type, :source_class, :created_at, :updated_at],
+          methods: [:file_url]
+        }
+      }
+    )
   end
 
   # This is for update profile parameters not passwords
@@ -30,15 +38,7 @@ class Api::V1::UsersController < ApplicationController
       if user.update(update_params)
         render json: {
           message: "User Updated successfully",
-          user: user.as_json(
-            only: [:id, :name, :email, :phone, :license_number, :license_expiry_date],
-            include: {
-              documents: {
-                only: [:id, :document_type, :source_class, :created_at, :updated_at],
-                methods: [:file_url]
-              }
-            }
-          )
+          user: user.as_json(only: [:id, :name, :email, :phone, :license_number, :license_expiry_date])
         }, status: :ok
       else
         render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
@@ -73,7 +73,7 @@ class Api::V1::UsersController < ApplicationController
   private
 
   def update_params
-    params.require(:user).permit(:name, :email, :phone, :license_number, :license_expiry_date, :license_id, :visa_id, :passport_id, :medical_certificate_id, :police_check_id, :license_history_id)
+    params.require(:user).permit(:name, :phone, :license_number, :license_expiry_date)
   end
 
   def reset_password_params

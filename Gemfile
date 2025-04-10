@@ -48,6 +48,7 @@ gem "bootsnap", require: false
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug"
+  gem 'rspec-rails'
 end
 
 group :development do
@@ -63,8 +64,12 @@ end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem "capybara"
-  gem "selenium-webdriver"
+  # gem "capybara"
+  # gem "selenium-webdriver"
+  gem 'factory_bot_rails'
+  gem 'faker'
+  gem 'database_cleaner-active_record'
+  gem 'shoulda-matchers'
 end
 
 gem 'dotenv-rails'
@@ -73,3 +78,4 @@ gem "rack-cors"
 gem "sidekiq", "~> 8.0"
 gem "jwt"
 gem "aws-sdk-s3"
+gem "kaminari"
