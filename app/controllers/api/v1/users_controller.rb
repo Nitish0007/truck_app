@@ -24,7 +24,7 @@ class Api::V1::UsersController < ApplicationController
       only: [:id, :name, :email, :phone, :license_number, :license_expiry_date, :role],
       include: {
         documents: {
-          only; [:id, :document_type, :source_class, :created_at, :updated_at],
+          only: [:id, :document_type, :source_class, :created_at, :updated_at],
           methods: [:file_url]
         }
       }
