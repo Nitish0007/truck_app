@@ -3,7 +3,11 @@ class Api::V1::TrucksController < ApplicationController
 
   def index
     trucks = Truck.all
-    render json: { data: trucks }, status: :ok
+    render json: { 
+      data: trucks.map do |truck|
+        truck.as_json.merge(truck.current_ride_and_driver_if_exists?)
+      end
+    }, status: :ok
   end
 
   def create

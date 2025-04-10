@@ -66,7 +66,7 @@ class Api::V1::DocumentsController < ApplicationController
 
   private
   def document_params
-    params.require(:document).permit(:user_id, :ride_id, :truck_id, :worksheet_id, :source_class, :document_type)
+    params.require(:document).permit(:user_id, :truck_id, :worksheet_id, :source_class, :document_type)
   end
 
 end
