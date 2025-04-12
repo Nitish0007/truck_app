@@ -17,8 +17,7 @@ Rails.application.routes.draw do
         registrations: 'api/v1/users/registrations',
         sessions: 'api/v1/users/sessions',
         passwords: 'api/v1/users/passwords'
-      },
-      defaults: { format: :json }
+      }
 
       devise_scope :api_v1_user do
         # sign_up route
@@ -28,7 +27,11 @@ Rails.application.routes.draw do
         post 'users/sign_in', to: 'users/sessions#create'
 
         post 'users/forgot_password', to: 'users/passwords#create'
+
+        # reset_password_success via mail link
+        get 'users/password_reset_success', to: 'users#password_reset_success', as: 'password_reset_success'
       end
+
       
       # user routes
       get 'users/:user_id/drivers', to: 'users#index'
