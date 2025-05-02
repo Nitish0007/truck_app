@@ -18,7 +18,7 @@ class Document < ApplicationRecord
     folder = "pdfs" if content_type.include?('pdf')
     folder = "images" if content_type.include?('image')
 
-    key = folder.nil ? "#{SecureRandom.uuid}_#{file_name}" : "#{folder}/#{SecureRandom.uuid}_#{file_name}"
+    key = folder.nil? ? "#{SecureRandom.uuid}_#{file_name}" : "#{folder}/#{SecureRandom.uuid}_#{file_name}"
     blob = ActiveStorage::Blob.create_before_direct_upload!(
       key: key,
       filename: file_name,
@@ -30,7 +30,24 @@ class Document < ApplicationRecord
     return [blob.service_url_for_direct_upload, blob.signed_id]
   end
 
+  def thumbnail_url
+    return "" unless file.attached?
+
+    if file.content_type.include?("image")
+      file.variant(resize_to_limit: [300, 300]).processed.url
+    elsif file.content_type == "application/pdf"
+      file.preview(resize_to_limit: [300, 300]).processed.url
+    else
+      nil
+    end
+  end
+
   def file_url
     file.url(expires_in: 30.minutes)
   end
+
+  ###########################################################################################
+  # steps to upload doc
+  
+  ###########################################################################################
 end

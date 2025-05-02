@@ -79,3 +79,5 @@ gem "sidekiq", "~> 8.0"
 gem "jwt"
 gem "aws-sdk-s3"
 gem "kaminari"
+gem 'image_processing', '~> 1.12'
+gem 'mini_magick', '~> 4.13'

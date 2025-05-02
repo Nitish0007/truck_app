@@ -1,5 +1,7 @@
 class Api::V1::UsersController < ApplicationController
   before_action :allow_admin_only, only: [:index]
+  skip_before_action :validate_request_format, only: [:password_reset_success]
+  skip_before_action :authenticate_request!, only: [:password_reset_success]
 
   def index
     # fetch list of drivers
@@ -9,7 +11,7 @@ class Api::V1::UsersController < ApplicationController
       include: {
         documents: {
           only: [:id, :document_type, :source_class, :created_at, :updated_at],
-          methods: [:file_url]
+          methods: [:file_url, :thumbnail_url]
         }
       }
       ), status: :ok
@@ -25,7 +27,7 @@ class Api::V1::UsersController < ApplicationController
       include: {
         documents: {
           only: [:id, :document_type, :source_class, :created_at, :updated_at],
-          methods: [:file_url]
+          methods: [:file_url, :thumbnail_url]
         }
       }
     )
@@ -68,6 +70,10 @@ class Api::V1::UsersController < ApplicationController
     else
       render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
     end
+  end
+
+  def password_reset_success
+    render :password_reset_success
   end
 
   private

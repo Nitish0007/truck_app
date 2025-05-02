@@ -50,9 +50,6 @@ class Api::V1::Users::PasswordsController < Devise::PasswordsController
     render :edit
   end
 
-  def password_reset_success
-  end
-
   private
   def validate_request_format
     # defined it empty here because want to skip it, when request comes from devise controller
